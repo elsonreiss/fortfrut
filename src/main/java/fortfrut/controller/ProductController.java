@@ -4,6 +4,7 @@ import fortfrut.dto.request.ProductRequest;
 import fortfrut.dto.response.ProductResponse;
 import fortfrut.entity.Product;
 import fortfrut.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> save(@RequestBody ProductRequest product) {
+    public ResponseEntity<ProductResponse> save(@RequestBody @Valid ProductRequest product) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> update(@PathVariable Long id,@RequestBody ProductRequest product) {
+    public ResponseEntity<ProductResponse> update(@PathVariable Long id,@RequestBody @Valid ProductRequest product) {
         return ResponseEntity.ok(productService.update(id, product));
     }
 
