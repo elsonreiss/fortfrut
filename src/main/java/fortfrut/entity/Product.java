@@ -3,6 +3,7 @@ package fortfrut.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,13 +23,13 @@ public class Product  {
     private String name;
 
     @Column(nullable = false)
-    private String quantity;
+    private Integer quantity;
 
     @Column(nullable = false)
-    private String price;
+    private double price;
 
     @Column(nullable = false)
-    private String expirationDate;
+    private LocalDate expirationDate;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
