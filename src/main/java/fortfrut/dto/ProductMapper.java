@@ -1,5 +1,6 @@
-package fortfrut.dto.request;
+package fortfrut.dto;
 
+import fortfrut.dto.request.ProductRequest;
 import fortfrut.dto.response.ProductResponse;
 import fortfrut.entity.Product;
 
@@ -16,6 +17,15 @@ public class ProductMapper {
                 .categoryName(product.getCategory() != null
                         ? product.getCategory().getName()
                         : null)
+                .build();
+    }
+
+    public static Product toEntity(ProductRequest request) {
+        return Product.builder()
+                .name(request.getName())
+                .quantity(request.getQuantity())
+                .price(request.getPrice())
+                .expirationDate(request.getExpirationDate())
                 .build();
     }
 }
