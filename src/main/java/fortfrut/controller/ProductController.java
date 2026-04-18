@@ -1,5 +1,7 @@
 package fortfrut.controller;
 
+import fortfrut.dto.request.ProductRequest;
+import fortfrut.dto.response.ProductResponse;
 import fortfrut.entity.Product;
 import fortfrut.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -17,22 +19,22 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<ProductResponse>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Product> save(@RequestBody Product product) {
+    public ResponseEntity<ProductResponse> save(@RequestBody ProductRequest product) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id,@RequestBody Product product) {
+    public ResponseEntity<ProductResponse> update(@PathVariable Long id,@RequestBody ProductRequest product) {
         return ResponseEntity.ok(productService.update(id, product));
     }
 
