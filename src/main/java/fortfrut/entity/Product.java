@@ -37,4 +37,8 @@ public class Product  {
     protected void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
