@@ -1,7 +1,12 @@
 package fortfrut.service;
 
 
+import fortfrut.dto.ProductMapper;
+import fortfrut.dto.request.ProductRequest;
+import fortfrut.dto.response.ProductResponse;
+import fortfrut.entity.Category;
 import fortfrut.entity.Product;
+import fortfrut.repository.CategoryRepository;
 import fortfrut.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,35 +18,55 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
     }
 
-    public Product findById(Long id) {
-        return productRepository.findById(id)
+    public ProductResponse findById(Long id) {
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        return ProductMapper.toResponse(product);
     }
 
-    public Product save(Product product) {
-        return productRepository.save(product);
+    public ProductResponse save(ProductRequest productRequest) {
+        Product product = ProductMapper.toEntity(productRequest);
+
+        if (productRequest.getCategoryId() != null) {
+            Category category = categoryRepository.findById(productRequest.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + productRequest.getCategoryId()));
+            product.setCategory(category);
+        }
+
+        return ProductMapper.toResponse(productRepository.save(product));
     }
 
-    public Product update(Long id, Product updatedProduct) {
+    public ProductResponse update(Long id, ProductRequest updatedProduct) {
 
-        Product existingProduct = findById(id);
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
 
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setQuantity(updatedProduct.getQuantity());
         existingProduct.setPrice(updatedProduct.getPrice());
         existingProduct.setExpirationDate(updatedProduct.getExpirationDate());
 
-        return productRepository.save(existingProduct);
+        if (updatedProduct.getCategoryId() != null) {
+            Category category = categoryRepository.findById(updatedProduct.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + updatedProduct.getCategoryId()));
+            existingProduct.setCategory(category);
+        }
+
+        return ProductMapper.toResponse(productRepository.save(existingProduct));
     }
 
     public void delete(Long id) {
-        Product existingProduct = findById(id);
-        productRepository.delete(existingProduct);
+        findById(id);
+        productRepository.deleteById(id);
     }
 }
 
