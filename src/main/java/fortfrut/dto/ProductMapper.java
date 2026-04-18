@@ -6,6 +6,10 @@ import fortfrut.entity.Product;
 
 public class ProductMapper {
 
+    /**
+      Converte uma entidade Product para um ProductResponse (DTO de saída).
+      O campo categoryName é preenchido com o nome da categoria, se houver.
+     */
     public static ProductResponse toResponse(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
@@ -20,6 +24,10 @@ public class ProductMapper {
                 .build();
     }
 
+    /**
+      Converte um ProductRequest (DTO de entrada) para a entidade Product.
+      A categoria não é definida aqui — deve ser associada separadamente no serviço.
+     */
     public static Product toEntity(ProductRequest request) {
         return Product.builder()
                 .name(request.getName())

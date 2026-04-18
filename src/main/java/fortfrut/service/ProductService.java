@@ -18,8 +18,10 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
     private final CategoryRepository categoryRepository;
 
+    // Retorna todos os produtos cadastrados convertidos para ProductResponse
     public List<ProductResponse> findAll() {
         return productRepository.findAll()
                 .stream()
@@ -27,12 +29,17 @@ public class ProductService {
                 .toList();
     }
 
+    // Busca um produto pelo ID e o retorna como ProductResponse. Lança exceção se não encontrado
     public ProductResponse findById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
         return ProductMapper.toResponse(product);
     }
 
+    /**
+      Cria um novo produto a partir dos dados do ProductRequest.
+      Se informado, associa a categoria correspondente ao produto antes de salvar.
+     */
     public ProductResponse save(ProductRequest productRequest) {
         Product product = ProductMapper.toEntity(productRequest);
 
@@ -45,6 +52,10 @@ public class ProductService {
         return ProductMapper.toResponse(productRepository.save(product));
     }
 
+    /**
+      Atualiza os dados de um produto existente pelo ID.
+      Se informado, atualiza também a categoria associada.
+     */
     public ProductResponse update(Long id, ProductRequest updatedProduct) {
 
         Product existingProduct = productRepository.findById(id)

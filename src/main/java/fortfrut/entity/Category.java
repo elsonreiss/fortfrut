@@ -1,6 +1,5 @@
 package fortfrut.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
