@@ -6,6 +6,7 @@ import fortfrut.dto.request.ProductRequest;
 import fortfrut.dto.response.ProductResponse;
 import fortfrut.entity.Category;
 import fortfrut.entity.Product;
+import fortfrut.exception.ResourceNotFoundException;
 import fortfrut.repository.CategoryRepository;
 import fortfrut.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class ProductService {
 
     public ProductResponse findById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
         return ProductMapper.toResponse(product);
     }
 
@@ -38,7 +39,7 @@ public class ProductService {
 
         if (productRequest.getCategoryId() != null) {
             Category category = categoryRepository.findById(productRequest.getCategoryId())
-                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + productRequest.getCategoryId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + productRequest.getCategoryId()));
             product.setCategory(category);
         }
 
@@ -48,7 +49,7 @@ public class ProductService {
     public ProductResponse update(Long id, ProductRequest updatedProduct) {
 
         Product existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
 
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setQuantity(updatedProduct.getQuantity());
@@ -57,7 +58,7 @@ public class ProductService {
 
         if (updatedProduct.getCategoryId() != null) {
             Category category = categoryRepository.findById(updatedProduct.getCategoryId())
-                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + updatedProduct.getCategoryId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + updatedProduct.getCategoryId()));
             existingProduct.setCategory(category);
         }
 
@@ -65,7 +66,9 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        findById(id);
+        if(!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Product not found with id: " + id);
+        } 
         productRepository.deleteById(id);
     }
 }
