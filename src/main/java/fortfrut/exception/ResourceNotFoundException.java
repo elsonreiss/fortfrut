@@ -1,8 +1,8 @@
 package fortfrut.exception;
 
-public class ResourceNotFoundException extends RuntimeException{
+public class ResourceNotFoundException extends RuntimeException {
 
-    public ResourceNotFoundException(String message){
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 }
