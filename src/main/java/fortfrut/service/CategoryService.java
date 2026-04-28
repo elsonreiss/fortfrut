@@ -1,6 +1,7 @@
 package fortfrut.service;
 
 import fortfrut.entity.Category;
+import fortfrut.exception.ResourceNotFoundException;
 import fortfrut.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class CategoryService {
 
     public Category findCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
     }
 
     public Category updateCategory(Long id, Category updatedCategory) {
@@ -33,6 +34,9 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
+        if(!categoryRepository.existsById(id)){
+            throw new ResourceNotFoundException("Category not found with id: " + id);
+        }
         Category existingCategory = findCategoryById(id);
         categoryRepository.delete(existingCategory);
     }
