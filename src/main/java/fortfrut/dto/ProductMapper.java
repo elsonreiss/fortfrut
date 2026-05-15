@@ -4,7 +4,7 @@ import fortfrut.dto.request.ProductRequest;
 import fortfrut.dto.response.ProductResponse;
 import fortfrut.entity.Product;
 
-public class ProductMapper {
+public class  ProductMapper {
 
     public static ProductResponse toResponse(Product product) {
         return ProductResponse.builder()
@@ -19,7 +19,6 @@ public class ProductMapper {
                         : null)
                 .build();
     }
-
     public static Product toEntity(ProductRequest request) {
         return Product.builder()
                 .name(request.getName())

@@ -8,6 +8,6 @@ public class FortfrutApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FortfrutApplication.class, args);
-	}
 
+	}
 }
